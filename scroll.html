@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rive Left-to-Right Walk Journey | Scroll Driven</title>
+  
+  <!-- Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  
+  <!-- Separate External CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Loading Screen -->
+  <div id="loading-overlay">
+    <div class="spinner"></div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #94a3b8;">
+      Loading Rive Animation & Assets...
+    </div>
+  </div>
+
+  <!-- Top Fixed Navigation -->
+  <header>
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <div>
+        <span class="brand-title">Rive Motion</span>
+        <span class="brand-badge">Left-to-Right Walk</span>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <div class="hud-pill" id="hud-pill">
+        <div class="status-dot" id="status-dot"></div>
+        <div class="status-text">State: <span id="status-label">IDLE</span> (Input = <span id="status-num">0</span>)</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Global Scroll Progress Bar -->
+  <div class="progress-bar-container">
+    <div class="progress-bar-fill" id="progress-bar-fill"></div>
+  </div>
+
+  <!-- Intro Hero Section -->
+  <section class="hero">
+    <div class="hero-pill">
+      <span>⚡</span> Horizontal Walk Cycle Track
+    </div>
+    <h1>Walk Across the Canvas</h1>
+    <p class="hero-sub">
+      As you scroll down, the character moves smoothly from the <strong>left side</strong> to the <strong>right side</strong> of the screen. Scrolling drives the state machine input <code>Number = 1</code> (Walk), and pausing returns to <code>Number = 0</code> (Idle).
+    </p>
+    <div class="scroll-hint">
+      <div class="mouse-frame">
+        <div class="mouse-wheel"></div>
+      </div>
+      <span>Scroll down to initiate the walk</span>
+    </div>
+  </section>
+
+  <!-- Pinned Scroll Section: Left-to-Right Horizontal Travel -->
+  <section class="walk-section" id="walk-section">
+    <div class="walk-sticky-stage">
+      
+      <!-- Sticky Stage Top Bar -->
+      <div class="stage-topbar">
+        <div class="stage-title-wrap">
+          <span class="stage-badge">Interactive Waypoint Track</span>
+          <h2 class="stage-heading">The Traveler's Progress</h2>
+        </div>
+      </div>
+
+      <!-- Story Milestones appearing dynamically as character walks -->
+      <div class="stories-track-container">
+        <div class="story-milestones-row">
+          
+          <div class="milestone-item active" data-step="0">
+            <div class="milestone-card">
+              <div class="card-step-badge">
+                <span class="card-beacon"></span> Stage 01 · 0%
+              </div>
+              <h3 class="card-title">Left Origin</h3>
+              <p class="card-desc">
+                The character is resting at the departure terminal. The State Machine is initialized in <code>IDLE</code> with <code>Number = 0</code>.
+              </p>
+            </div>
+          </div>
+
+          <div class="milestone-item" data-step="1">
+            <div class="milestone-card">
+              <div class="card-step-badge">
+                <span class="card-beacon"></span> Stage 02 · 33%
+              </div>
+              <h3 class="card-title">Pacing Forward</h3>
+              <p class="card-desc">
+                Continuous scroll momentum triggers the walking cycle: <code>Number = 1</code>. The skeletal rig moves fluidly in real-time.
+              </p>
+            </div>
+          </div>
+
+          <div class="milestone-item" data-step="2">
+            <div class="milestone-card">
+              <div class="card-step-badge">
+                <span class="card-beacon"></span> Stage 03 · 66%
+              </div>
+              <h3 class="card-title">Midway Horizon</h3>
+              <p class="card-desc">
+                Passing the halfway marker. If you pause scrolling here, the character smoothly shifts back to <code>IDLE</code>.
+              </p>
+            </div>
+          </div>
+
+          <div class="milestone-item" data-step="3">
+            <div class="milestone-card">
+              <div class="card-step-badge">
+                <span class="card-beacon"></span> Stage 04 · 100%
+              </div>
+              <h3 class="card-title">Right Destination</h3>
+              <p class="card-desc">
+                The traveler reaches the far right edge of the screen, completing the horizontal trajectory.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Walking Arena with Ground Line and Sliding Character -->
+      <div class="walking-arena" id="walking-arena">
+        
+        <!-- Waypoint Nodes on the Ground -->
+        <div class="track-waypoints">
+          <div class="waypoint-node reached">
+            <div class="waypoint-dot"></div>
+            <span class="waypoint-label">0% START</span>
+          </div>
+          <div class="waypoint-node">
+            <div class="waypoint-dot"></div>
+            <span class="waypoint-label">33% MILESTONE</span>
+          </div>
+          <div class="waypoint-node">
+            <div class="waypoint-dot"></div>
+            <span class="waypoint-label">66% MIDWAY</span>
+          </div>
+          <div class="waypoint-node">
+            <div class="waypoint-dot"></div>
+            <span class="waypoint-label">100% ARRIVAL</span>
+          </div>
+        </div>
+
+        <!-- Glowing Ground Line -->
+        <div class="track-floor-line"></div>
+
+        <!-- Character Container that moves from Left to Right -->
+        <div class="character-slider" id="character-slider">
+          <div class="character-holopod" id="character-holopod">
+            <canvas id="rive-canvas"></canvas>
+          </div>
+          <div class="character-shadow"></div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Outro Section -->
+  <section class="outro">
+    <div class="outro-card">
+      <h2>Destination Reached!</h2>
+      <p class="outro-desc">
+        You have guided the character across the entire width of the screen. Scroll back up to walk in reverse, or use the quick restart button below.
+      </p>
+      <button class="btn-replay" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        Return to Start ↑
+      </button>
+    </div>
+  </section>
+
+  <!-- Manual Control HUD -->
+  <div class="controls-card">
+    <div class="controls-title">Quick Test Controls</div>
+    <div class="controls-btns">
+      <button class="btn-ctrl active" id="btn-idle" onclick="window.manualState(0)">Idle (0)</button>
+      <button class="btn-ctrl" id="btn-walk" onclick="window.manualState(1)">Walk (1)</button>
+      <button class="btn-ctrl" id="btn-auto" onclick="window.toggleAutoWalk()">Auto Demo</button>
+    </div>
+  </div>
+
+  <!-- Live Telemetry Card -->
+  <div class="telemetry-card">
+    <div class="telemetry-header">
+      <span>Rive Controller</span>
+      <span style="color: var(--accent-cyan);">ONLINE</span>
+    </div>
+    <div class="telemetry-row">
+      <span>Input Condition:</span>
+      <span class="val">1: Walk | 0: Idle</span>
+    </div>
+    <div class="telemetry-row">
+      <span>Current Input:</span>
+      <span class="val idle" id="tele-current-val">0 (Idle)</span>
+    </div>
+    <div class="telemetry-row">
+      <span>Walk Progress:</span>
+      <span class="val" id="tele-scroll-progress">0%</span>
+    </div>
+    <div class="telemetry-row">
+      <span>Scroll Speed:</span>
+      <span class="val" id="tele-scroll-speed">0 px/s</span>
+    </div>
+  </div>
+
+  <!-- External Rive WebGL2 Runtime -->
+  <script src="https://unpkg.com/@rive-app/webgl2@2.40.1"></script>
+  
+  <!-- Separate External JavaScript -->
+  <script src="script.js"></script>
+
+</body>
+</html>
