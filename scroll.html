@@ -31,7 +31,7 @@
       </div>
       <div>
         <span class="brand-title">Rive Motion</span>
-        <span class="brand-badge">Left-to-Right Walk</span>
+        <span class="brand-badge">Walk Journey</span>
       </div>
     </div>
 
@@ -48,32 +48,25 @@
     <div class="progress-bar-fill" id="progress-bar-fill"></div>
   </div>
 
-  <!-- Intro Hero Section -->
-  <section class="hero">
-    <div class="hero-pill">
-      <span>⚡</span> Horizontal Walk Cycle Track
-    </div>
-    <h1>Walk Across the Canvas</h1>
-    <p class="hero-sub">
-      As you scroll down, the character moves smoothly from the <strong>left side</strong> to the <strong>right side</strong> of the screen. Scrolling drives the state machine input <code>Number = 1</code> (Walk), and pausing returns to <code>Number = 0</code> (Idle).
-    </p>
-    <div class="scroll-hint">
-      <div class="mouse-frame">
-        <div class="mouse-wheel"></div>
-      </div>
-      <span>Scroll down to initiate the walk</span>
-    </div>
-  </section>
-
-  <!-- Pinned Scroll Section: Left-to-Right Horizontal Travel -->
+  <!-- Pinned Scroll Section: Sticky from the Start until 100% Arrival -->
   <section class="walk-section" id="walk-section">
-    <div class="walk-sticky-stage">
+    <div class="walk-sticky-stage" id="walk-sticky-stage">
       
-      <!-- Sticky Stage Top Bar -->
+      <!-- Stage Top Bar -->
       <div class="stage-topbar">
         <div class="stage-title-wrap">
-          <span class="stage-badge">Interactive Waypoint Track</span>
-          <h2 class="stage-heading">The Traveler's Progress</h2>
+          <div class="stage-badge">
+            <span>⚡</span> Scroll-Driven Horizontal Traversal
+          </div>
+          <h1 class="stage-heading">Scroll to Walk Across the Screen</h1>
+          <p class="stage-subtitle">
+            Scroll down to advance the character from left to right. Scrolling sets <code>Number = 1</code> (Walk), and pausing resets to <code>Number = 0</code> (Idle).
+          </p>
+        </div>
+
+        <div class="scroll-direction-indicator">
+          <span class="arrow">↓</span>
+          <span>Scroll down to walk forward</span>
         </div>
       </div>
 
@@ -88,7 +81,7 @@
               </div>
               <h3 class="card-title">Left Origin</h3>
               <p class="card-desc">
-                The character is resting at the departure terminal. The State Machine is initialized in <code>IDLE</code> with <code>Number = 0</code>.
+                The character is resting at the start. State Machine initialized at <code>IDLE</code> with <code>Number = 0</code>.
               </p>
             </div>
           </div>
@@ -100,7 +93,7 @@
               </div>
               <h3 class="card-title">Pacing Forward</h3>
               <p class="card-desc">
-                Continuous scroll momentum triggers the walking cycle: <code>Number = 1</code>. The skeletal rig moves fluidly in real-time.
+                Continuous scroll momentum drives the walk cycle: <code>Number = 1</code>. The skeletal rig moves fluidly in real-time.
               </p>
             </div>
           </div>
@@ -124,7 +117,7 @@
               </div>
               <h3 class="card-title">Right Destination</h3>
               <p class="card-desc">
-                The traveler reaches the far right edge of the screen, completing the horizontal trajectory.
+                The traveler reaches 100% arrival at the right edge. Scroll further to release the sticky stage.
               </p>
             </div>
           </div>
@@ -161,7 +154,7 @@
         <!-- Character Container that moves from Left to Right -->
         <div class="character-slider" id="character-slider">
           <div class="character-holopod" id="character-holopod">
-            <canvas id="rive-canvas"></canvas>
+            <canvas id="rive-canvas-walk"></canvas>
           </div>
           <div class="character-shadow"></div>
         </div>
@@ -171,52 +164,53 @@
     </div>
   </section>
 
-  <!-- Outro Section -->
-  <section class="outro">
-    <div class="outro-card">
-      <h2>Destination Reached!</h2>
-      <p class="outro-desc">
-        You have guided the character across the entire width of the screen. Scroll back up to walk in reverse, or use the quick restart button below.
-      </p>
-      <button class="btn-replay" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-        Return to Start ↑
-      </button>
+  <!-- Bottom Section: Interactive Button on the Left, Animation on the Right -->
+  <section class="bottom-interactive-section" id="interactive-section">
+    <div class="interactive-split-grid">
+      
+      <!-- Left Column: Button & State Controller -->
+      <div class="interactive-left-col">
+        <div class="interactive-pill">
+          <span>⚡</span> Manual State Lab
+        </div>
+        
+        <h2 class="interactive-title">Click to change the state</h2>
+        
+        <p class="interactive-desc">
+          Click the button below to toggle the Rive animation directly between <strong>Idle</strong> and <strong>Walk</strong> cycles. Watch the character on the right react instantaneously.
+        </p>
+
+        <!-- Main Click Button to toggle Idle / Walk -->
+        <button class="toggle-state-button" id="btn-toggle-state" onclick="window.toggleInteractiveState()">
+          <span id="btn-toggle-icon">⚡</span>
+          <span id="btn-toggle-text">Click to Walk</span>
+        </button>
+
+        <!-- State Status Box -->
+        <div class="state-status-card">
+          <div class="status-card-header">Active State Machine Condition</div>
+          <div class="status-card-val">
+            <div class="status-card-dot" id="interactive-status-dot"></div>
+            <span id="interactive-status-label">Current State: IDLE</span>
+          </div>
+          <div class="state-meta-row">
+            <span class="meta-pill active" id="pill-idle">Number = 0 (Idle)</span>
+            <span class="meta-pill" id="pill-walk">Number = 1 (Walk)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Animation Display Section -->
+      <div class="interactive-right-col">
+        <div class="interactive-holopod-frame">
+          <canvas id="rive-canvas-interactive"></canvas>
+        </div>
+        <div class="interactive-pedestal"></div>
+        <div class="interactive-shadow"></div>
+      </div>
+
     </div>
   </section>
-
-  <!-- Manual Control HUD -->
-  <div class="controls-card">
-    <div class="controls-title">Quick Test Controls</div>
-    <div class="controls-btns">
-      <button class="btn-ctrl active" id="btn-idle" onclick="window.manualState(0)">Idle (0)</button>
-      <button class="btn-ctrl" id="btn-walk" onclick="window.manualState(1)">Walk (1)</button>
-      <button class="btn-ctrl" id="btn-auto" onclick="window.toggleAutoWalk()">Auto Demo</button>
-    </div>
-  </div>
-
-  <!-- Live Telemetry Card -->
-  <div class="telemetry-card">
-    <div class="telemetry-header">
-      <span>Rive Controller</span>
-      <span style="color: var(--accent-cyan);">ONLINE</span>
-    </div>
-    <div class="telemetry-row">
-      <span>Input Condition:</span>
-      <span class="val">1: Walk | 0: Idle</span>
-    </div>
-    <div class="telemetry-row">
-      <span>Current Input:</span>
-      <span class="val idle" id="tele-current-val">0 (Idle)</span>
-    </div>
-    <div class="telemetry-row">
-      <span>Walk Progress:</span>
-      <span class="val" id="tele-scroll-progress">0%</span>
-    </div>
-    <div class="telemetry-row">
-      <span>Scroll Speed:</span>
-      <span class="val" id="tele-scroll-speed">0 px/s</span>
-    </div>
-  </div>
 
   <!-- External Rive WebGL2 Runtime -->
   <script src="https://unpkg.com/@rive-app/webgl2@2.40.1"></script>

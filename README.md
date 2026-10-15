@@ -8,35 +8,25 @@ As you scroll down the page, a character animation moves across the screen from 
 
 ## 🌟 Key Features
 
-1. **Rive State Machine Controller**:
-   - Uses the State Machine: `State Machine 1`.
-   - Binds to the state machine input: `Number`.
-   - **`Number = 1`** triggers the **Walk** animation.
-   - **`Number = 0`** triggers the **Idle** animation.
+1. **Sticky Scroll Walk Right from the Start**:
+   - The interactive walk section begins immediately at the top of the page.
+   - Pinned sticky as you scroll: the character starts at `0%` on the far left and travels horizontally until `100% ARRIVAL` at the far right.
+   - Once 100% arrival is reached, scrolling continues down naturally to reveal the bottom section.
+   - Scrolling down triggers `Number = 1` (Walk), while pausing resets `Number = 0` (Idle).
+   - Scrolling backwards flips the character horizontally (`scaleX(-1)`) to walk back to the left.
 
-2. **Left-to-Right Horizontal Travel**:
-   - Pinned sticky section (`walk-section`) translates vertical scroll momentum into horizontal travel.
-   - The character starts at `0%` on the far left and reaches `100%` on the far right.
-
-3. **Dynamic Milestone Reveal**:
-   - Four story milestone cards align across the horizontal path:
+2. **Dynamic Story Milestones & Ground Beacons**:
+   - Four milestone cards and neon ground nodes activate in sequence as the character reaches them:
      - **Stage 01 (0%)**: *Left Origin*
      - **Stage 02 (33%)**: *Pacing Forward*
      - **Stage 03 (66%)**: *Midway Horizon*
      - **Stage 04 (100%)**: *Right Destination*
-   - Each card illuminates, scales, and lights up its ground waypoint beacon as the character walks past it.
 
-4. **Bidirectional Directional Facing**:
-   - Scrolling down moves the character forward (facing right).
-   - Scrolling back up mirrors the character horizontally (`scaleX(-1)`) to face left and walk backwards toward origin.
-
-5. **Debounced Idle Return**:
-   - An intelligent 180ms debounce timer smoothly returns `Number` to `0` whenever scrolling pauses.
-
-6. **Interactive Testing HUD**:
-   - **Top Navigation Bar**: Live State indicator (`State: WALK / IDLE (Input = 1 / 0)`).
-   - **Telemetry Card**: Real-time readout of scroll speed, walk percentage, and active input values.
-   - **Quick Test Buttons**: Manual override buttons to test `Idle (0)`, `Walk (1)`, and an `Auto Demo` mode without needing to scroll.
+3. **Bottom Interactive Section (Button on Left, Animation on Right)**:
+   - Below the walk journey, a two-column interactive lab provides immediate manual testing:
+     - **Left Column**: Headline *"Click to change the state"*, interactive status card, and a large toggle button.
+     - **Right Column**: A dedicated Rive animation holopod.
+     - Clicking the button instantly toggles the Rive State Machine between **Idle** (`Number = 0`) and **Walk** (`Number = 1`).
 
 ---
 
